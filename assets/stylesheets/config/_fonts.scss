@@ -1,0 +1,27 @@
+// Import Google fonts
+@import url('https://fonts.googleapis.com/css?family=Nunito:400,700|Work+Sans:400,700&display=swap');
+
+@font-face {
+  font-family: "font-1";
+  src: font-url("KronaOne-Regular.woff") format("woff");
+}
+
+@font-face {
+  font-family: "font-2";
+  src: font-url("NB-International-Pro-Light.woff");
+}
+
+
+$font-1: "font-2";
+$font-2: "font-2", serif;
+// Define fonts for body and headers
+
+// To use a font file (.woff) uncomment following lines
+// @font-face {
+//   font-family: "Font Name";
+//   src: font-url('FontFile.eot');
+//   src: font-url('FontFile.eot?#iefix') format('embedded-opentype'),
+//        font-url('FontFile.woff') format('woff'),
+//        font-url('FontFile.ttf') format('truetype')
+// }
+// $my-font: "Font Name";

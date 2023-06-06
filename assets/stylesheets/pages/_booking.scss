@@ -1,0 +1,168 @@
+.container-booking {
+  height: auto;
+  width: 80%;
+  margin: 0px auto;
+
+  h1 {
+    text-align: center;
+    margin: 30px 0;
+  }
+
+  .box-d-flex {
+    margin: 0 auto;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+
+    .box {
+      height: 300px;
+      width: 500px;
+      margin: 10px;
+
+      .img-container-booking {
+        height: auto;
+        width: 100%;
+        position: relative;
+        transition: 1s ease-in;
+        overflow: hidden;
+        border-radius: 8px;
+        box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
+
+        .btnflex{
+          opacity: 0;
+        }
+
+        &:hover .img-booking-effect {
+          height: 60%;
+          border-radius: 0 0px 20px 20px;
+          transition: 0.5s ease-in;
+
+          .btnflex {
+            transition: opacity 1.5s ease-in;
+            opacity: 1;
+          }
+
+          .booking-capacity, .booking-description, .booking-price, .review-van, .status-booking {
+            transition: opacity 1.5s ease-in;
+            opacity: 1;
+          }
+        }
+
+        &:hover .img-van {
+          opacity: 0.7;
+          transition: 1s ease-in;
+          transform: scale(1.1);
+        }
+
+        .img-van {
+          transition: 1s ease-in;
+        }
+
+        .img-booking-effect {
+          transition: 1s ease-in;
+          height: 22%;
+          width: 100%;
+          background-color: $color-1;
+          padding: 25px;
+          opacity: 1;
+          position: absolute;
+          top: 0;
+          display: flex;
+          justify-content: space-between;
+
+          .feed-back {
+              background-color: $vert;
+              padding: 8px 16px;
+              color: $color-1;
+              text-decoration: none;
+              border: 1px solid $vert;
+              border-radius: 8px;
+              transition: 0.5s ease-in;
+              margin: 0 4px;
+
+              &:hover {
+                background-color: $color-1;
+                border: 1px solid $vert;
+                color: $vert;
+                transition: 0.5s ease-in;
+              }
+            }
+
+          .btnflex {
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+
+            .review-van {
+              background-color: $vert;
+              padding: 8px 16px;
+              color: $color-1;
+              text-decoration: none;
+              border: 1px solid $vert;
+              border-radius: 8px;
+              transition: 0.5s ease-in;
+              margin: 0 4px;
+
+              &:hover {
+                background-color: $color-1;
+                border: 1px solid $vert;
+                color: $vert;
+                transition: 0.5s ease-in;
+              }
+            }
+
+            .annuler {
+              color: $vert;
+              background-color: $color-1;
+              border: 1px solid $vert;
+            }
+          }
+
+
+          .booking-title {
+            color: $color-3;
+            opacity: 1;
+          }
+
+          .booking-capacity, .booking-description, .booking-price, .review-van, .status-booking {
+            opacity: 0;
+            margin: 0;
+            padding: 0;
+            transition: opacity 0.2s ease-in;
+          }
+
+          p {
+            color: $color-3;
+          }
+
+          .left-info-booking {
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: flex-start;
+          }
+
+          .right-info-booking {
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: flex-end;
+          }
+
+          .booking-price {
+            margin: 0;
+            border: 1px solid $color-3;
+            padding: 8px 16px;
+            width: 100px;
+            text-align: center;
+            border-radius: 8px;
+          }
+        }
+      }
+    }
+  }
+}

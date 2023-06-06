@@ -1,0 +1,196 @@
+
+.home {
+  height: auto;
+  width: 100%;
+  overflow-y: hidden;
+  margin: 0 auto;
+  background-color: #80afe4c2;
+  /*
+    HEADER 
+  */
+  .banner {
+    background-image: url('../../images/banner2.jpg');
+    background-position: center;
+    background-size: cover;
+
+    .background-effect {
+      height: 100%;
+      width: 100%;
+      background-color: rgba(0, 0, 0, 0.4);
+      width: 100%;
+      height: 80vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+
+      .section-banner {
+        width: 80%;
+        text-align: center;
+        color: #DED9C4;
+      }
+      
+      .section-banner h1 {
+          font-size: 4rem;
+      }
+
+      .section-banner p {
+          font-size: 1.3rem;
+          margin: 5vh 0;
+      }
+    }
+
+    .btn-discover {
+      text-align: start;
+      padding: 16px 24px;
+      margin: 5px;
+      border-radius: 16px;
+      text-decoration: none;
+      transition: 0.2s ease-in;
+
+    }
+    .btn-discover:hover {
+      background-color: #120326;
+      border: 1px solid #4CAF50;
+      color: #4CAF50;
+      transition: 0.2s ease-in;
+    }
+
+    .your-van {
+      background-color: #120326;
+      color: #4CAF50;
+    }
+
+    .all-vans {
+      background-color: #4CAF50;
+      color: #120326;
+      font-size: 1rem;
+      font-weight: 600;
+    }
+  }
+  /*
+    MAIN PART WITH SVGS
+  */
+
+  .container-svgs {
+    display: flex;
+    flex-direction: column;
+
+    .box-flex-column {
+      height: 200px;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+
+      .box-title p {
+        color: #373737;
+        text-align: center;
+        margin: 0;
+        font-size: 1.2rem;
+        font-weight: 600; 
+      }
+
+      .box-svg {
+        height: 150px;
+        width: 150px;
+        position: relative;
+        transition: .3s ease-in-out;
+        cursor: pointer;
+      }
+        
+      .box-svg:hover {
+        transform: scale(1.1);
+        transition: .3s ease-in-out;
+      }
+
+      .box-svg p{
+        font-weight: 600;
+      }
+
+      .box-svg .box-number {
+        text-align: center;
+        height: 25px;
+        width: 25px;
+        background: #4CAF50;
+        border-radius: 50%;
+        position: absolute;
+        top: 0;
+        left: 0;
+      }
+
+      .box-svg-1 {
+        background-image: url('../../images/car.svg');
+        background-repeat: no-repeat;
+        background-position: center;
+        background-size: contain;
+      }
+
+      .box-svg-2 {
+        background-image: url('../../images/enjoy.svg');
+        background-repeat: no-repeat;
+        background-position: center;
+        background-size: contain;
+      }
+
+      .box-svg-3 {
+        background-image: url('../../images/reviews.svg');
+        background-repeat: no-repeat;
+        background-position: center;
+        background-size: contain;
+      }
+    }
+  }
+  /*
+    MAIN BOTTOM PART TEXT + IMG
+  */
+  .container-text-img {
+    height: auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    .dflex-container {
+      height: 100%;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      align-items: center;
+      .right-home-info {
+        color: #373737;
+        padding: 2vh 2vw;
+      }
+      .left-home-info {
+        background-image: url('../../images/van-night-home.jpg');
+        background-position: center;
+        background-size: cover;
+        border-radius: 15px;
+        width: 75vw;
+        height: 30vh;
+        margin: 1vh 1vw;
+      }
+    }
+  }
+}
+
+@media (min-width: 850px) {
+  .home .container-svgs {
+    display: flex;
+    flex-direction: row;
+  }
+}
+
+@media (min-width: 1000px) {
+  .banner h1{
+    font-size: 9rem;
+  }
+  .home .container-text-img .dflex-container{
+    flex-direction: row;
+    .left-home-info{
+      width: 50vw;
+      height: 30vh;
+    }
+  }
+}
