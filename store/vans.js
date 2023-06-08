@@ -1,5 +1,4 @@
 import axios from 'axios'
-// import groupBy from 'lodash/fp/groupBy'
 import Blob from 'blob';
 
 // STATE
@@ -22,7 +21,7 @@ export const mutations = {
     state.vans.push(res)
   },
   UPDATE_VAN(state, res) {
-    const index = state.vans.findIndex((i) => i.id === res.id)
+    const index = state.vans.findIndex((i) => i.vanId === res.vanId)
     state.vans.splice(index, 1, res)
   },
   DELETE_VAN(state, id) {
@@ -83,7 +82,6 @@ export const actions = {
       `http://localhost:3001/vans/${formData.vanId}`,
       body
       )
-      console.log('res:', res)
     const updatedVan = {
       vanId: formData.vanId,
       orgId: formData.orgId,
@@ -92,7 +90,6 @@ export const actions = {
       description: formData.description,
       price: formData.price,
     }
-    console.log('updatedVan:', updatedVan)
     commit('UPDATE_VAN', updatedVan)
     return res
   },
@@ -108,23 +105,7 @@ export const actions = {
 // GETTERS
 
 export const getters = {
-  // getVansPicturesByVanId: (state, getters, rootState, rootGetters) => {
-  //   const getVansWithPic = []
-  //   for (const picture of state.vansPictures) {
-  //     const van = state.vans.find((v) => picture.vanId === v.vanId)
-  //     const uint8Array = new Uint8Array(picture.picture);
-  //     const blob = new Blob([uint8Array], { type: 'image/jpeg' });
-  //     const readableImage = URL.createObjectURL(blob);
-  //     getVansWithPic.push({
-  //       ...picture,
-  //       readableImage,
-  //       van,
-  //     })
-  //   }
-  //   return getVansWithPic
-  //   // return  groupBy('vanId', getVansWithPic)
-  // },
-  getVansWithPictures: (state, getters, rootState, rootGetters) => {
+  getVansWithPictures: (state) => {
     const getVansWithPic = []
     for (const van of state.vans) {
       const readablePic = []
@@ -138,6 +119,5 @@ export const getters = {
       getVansWithPic.push({...van, readablePictures : readablePic})
     }
     return getVansWithPic
-    // return  groupBy('vanId', getVansWithPic)
   }
 }

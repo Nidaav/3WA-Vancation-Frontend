@@ -1,17 +1,14 @@
 <template>
   <div class="home">
     <header class="banner">
-      <ErrorMessageHandling v-if="errorMessage" :error-message="errorMessage" />
+      <ErrorMessageHandling v-if="errorMessage !== ''" :error-message="errorMessage" />
       <div class="background-effect">
         <div class="title section-banner">
           <h1 class="title-home">Vancation</h1>
         </div>
         <div class="description section-banner">
-          <p class="description-home"><em>Louez un camping-car, fourgon ou van aménagé et voyagez dans toute l'Europe
-              !</em></p>
+          <p class="description-home"><em>Louez un camping-car, fourgon ou van aménagé et voyagez dans toute la Bretagne !</em></p>
         </div>
-        <!-- TODO: placer des section (permet de regrouper des sections et articles) et articles (ne contient que des p, img, titres etc) -->
-        <!-- TODO: placer un footer -->
         <div class="btn-home">
           <v-btn to="/vans" class="btn-discover all-vans">Voir les vans</v-btn>
         </div>
@@ -84,16 +81,22 @@ export default {
       errorMessage: ''
     };
   },
+  watch: {
+  },
   created() {
     this.init()
   },
 
   methods: {
     init() {
-      console.log('this.$route.query.message:', this.$route.query.message)
-      if (this.$route.query.message)
+      if (this.$route.query.message) {
         this.errorMessage = this.$route.query.message;
+        setTimeout(this.resetErrorMessage, 4000)
+      }
     },
+    resetErrorMessage() {
+      this.errorMessage = ''
+    }
   }
 }
 </script>

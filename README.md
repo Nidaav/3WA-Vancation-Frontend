@@ -17,6 +17,14 @@ $ npm run start
 $ npm run generate
 ```
 
+Pour vous connecter, 3 types d'utilisateurs : 
+ - Le visiteur classique email : c@c , mdp: c ;
+ - L'organisation loueuse de vans : email : b@b , mdp: b ;
+ - L'administrateur email : a@a , mdp: a ; 
+
+
+
+
 For detailed explanation on how things work, check out the [documentation](https://nuxtjs.org).
 
 ## Special Directories

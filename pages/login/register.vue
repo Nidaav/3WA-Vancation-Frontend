@@ -14,7 +14,7 @@
 				</v-col>
 
 				<v-col cols="12">
-					<v-text-field v-model="newUser.password" :rules="passwordRules" label="Mot de passe" required></v-text-field>
+					<v-text-field v-model="newUser.password" :rules="passwordRules" :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'" :type="show1 ? 'text' : 'password'" label="Mot de passe" required @click:append="show1 = !show1"></v-text-field>
 				</v-col>
 				<v-col cols="12" class="d-flex justify-space-around mt-4">
 					<v-btn :disabled="!valid || isLoading" color="info" @click="register">
@@ -26,7 +26,7 @@
 					</v-btn>
 				</v-col>
 				<v-col cols="12" class="d-flex justify-center mt-4">
-					<v-btn color="info" to="/login">Se connecter</v-btn>
+					<v-btn to="/login">Retour</v-btn>
 				</v-col>
 			</v-row>
 			<v-row no-gutters class="d-flex text-center align-center mt-6">
@@ -45,6 +45,7 @@ export default {
 	data: () => ({
 		valid: false,
 		isLoading: false,
+		show1: false,
 		newUser: { firstName: '', lastName: '', email: '', password: '' },
 		nameRules: [
 			v => !!v || 'Ce champ est requis',
@@ -57,24 +58,27 @@ export default {
 		passwordRules: [
 			v => !!v || 'Ce champ est requis',
 		],
-		errorMessage: null
 	}),
 	methods: {
 		...mapActions('users', ['createUser']),
 		async register() {
 			this.isLoading = true
 			try {
-				const registerInfos = await this.createUser(this.newUser)
-				console.log('registerInfos:', registerInfos)
+				await this.createUser(this.newUser)
 				this.$router.push('/login');
 			} catch (error) {
-				this.errorMessage = error
+				console.log('error:', error)
 			}
 			this.isLoading = false
 		},
-		reset() {
-			this.$refs.form.reset()
-		},
+    reset() {
+      this.newUser = {
+        firstName: '',
+        lastName: '',
+        email: '',
+        password: ''
+      };
+    },
 	}
 }
 </script>

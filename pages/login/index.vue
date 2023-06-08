@@ -7,7 +7,7 @@
           <v-text-field v-model="loginConn.email" :rules="emailRules" label="E-mail" required></v-text-field>
         </v-col>
         <v-col cols="12">
-          <v-text-field v-model="loginConn.password" :rules="passwordRules" label="Password" required></v-text-field>
+          <v-text-field v-model="loginConn.password" :rules="passwordRules" :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'" :type="show1 ? 'text' : 'password'" label="Mot de passe" required @click:append="show1 = !show1"></v-text-field>
         </v-col>
         <v-col class="d-flex justify-space-around" cols="12" sm="9">
           <v-btn :disabled="!valid || isLoading" color="info" class="" @click="login">
@@ -64,6 +64,7 @@ export default {
   data: () => ({
     valid: false,
     isLoading: false,
+		show1: false,
     loginConn: {
       email: '',
       password: ''
@@ -94,8 +95,7 @@ export default {
     async login() {
       this.isLoading = true
       try {
-        const loginInfos = await this.loginUser(this.loginConn)
-        console.log('loginInfos:', loginInfos)
+        await this.loginUser(this.loginConn)
         const lastVisitedPage = sessionStorage.getItem('lastVisitedPage');
         if (lastVisitedPage) {
           this.$router.push(lastVisitedPage);
@@ -104,7 +104,6 @@ export default {
         }
       } catch (error) {
         console.log('error:', error)
-        this.errorMessage = error
         this.reset()
       }
       this.isLoading = false
@@ -112,14 +111,10 @@ export default {
     async logout() {
       this.isLoading = true
       try {
-        console.log('this.loginConn:', this.loginConn)
-        const loginInfos = await this.logoutUser()
-        console.log('loginInfos:', loginInfos)
-        // this.$router.push('/');
+        await this.logoutUser()
 
       } catch (error) {
         console.log('error:', error)
-        this.errorMessage = error
       }
       this.isLoading = false
     },

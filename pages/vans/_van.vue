@@ -6,23 +6,18 @@
         <v-carousel-item v-for="(picture, i) in images" :key="i" :src="picture">
         </v-carousel-item>
       </v-carousel>
-      <!-- <v-col v-for="picture in van.readablePictures" :key="picture">
-          <h5>image : {{ picture }}</h5>
-          <img height="250" :src="picture" alt="Photo de van" />
-        </v-col> -->
       <v-card-text>
         <v-row align="center" class="mx-0">
             <v-rating :value="reviews.stars" color="info" dense half-increments readonly size="14"></v-rating>
             <v-col class="grey--text ms-4">
               {{ reviews.stars + ' (' +  reviews.reviewsNumber + ')' }}
-              <!-- 4.5 (413) -->
             </v-col>
           </v-row>
         <v-row class="flex-column">
           <v-col class="text-subtitle-1">
             {{ van.price }} € / jour • {{ van.capacity }} places
           </v-col>
-          <v-col>Small plates, salads & sandwiches - an intimate setting with 12 indoor seats plus patio seating.</v-col>
+          <v-col>{{ van.description }}</v-col>
           <v-col class="d-flex justify-space-between">
             <v-btn color="info" @click="showBookingDialog(!showBooking)">Réserver ce van</v-btn>       
             <v-btn to="/vans">Retour</v-btn>
@@ -44,7 +39,7 @@
           <v-date-picker v-model="bookingInfos" color="info" range></v-date-picker>
         </v-col>
         <v-col class="d-flex justify-space-between">
-          <v-btn class="mx-2 my-2" color="info" @click="addBooking">Réserver</v-btn>
+          <v-btn :disabled="new Date(bookingInfos[0]).getTime() < new Date().getTime() || new Date(bookingInfos[1]).getTime() < new Date().getTime()" class="mx-2 my-2" color="info" @click="addBooking">Réserver</v-btn>
           <v-btn class="mx-2 my-2" @click="showBooking = false">Annuler</v-btn>
         </v-col>
       </v-row>
@@ -71,8 +66,7 @@ export default {
     ...mapGetters('vans', ['getVansWithPictures']),
     ...mapGetters('bookings', ['getReviewsAndStarsByVan']),
   },
-  watch: {
-  },
+  watch: {},
   created() {
     this.init()
   },
@@ -92,16 +86,14 @@ export default {
       try {
         await this.createBooking({ dates: this.bookingInfos, van: this.van, user })
         this.$router.push('/bookings');
-
       } catch (error) {
-        this.errorMessage = error
+        console.log('error:', error)
       }
     },
   },
 }
 </script>
 <style>
-/* @import '~/assets/stylesheets/components/_van_show.scss'; */
 .custom-dialog {
   background-color: rgb(32, 31, 31);
 }

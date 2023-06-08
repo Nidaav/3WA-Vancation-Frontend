@@ -4,16 +4,7 @@ import axios from 'axios'
 
 export const state = () => ({
   users: [],
-  connectedUser: {
-    email: 'b@b',
-    firstName: 'frederico',
-    lastName: 'bourhis',
-    password: '$2b$10$wTvedkz0WbLw8.sQX2TVleNn52T9w1r0zRSxux1v/5cFWGSs.ph5O',
-    role: 2,
-    signUpDate: '2023-06-03T09:07:42.000Z',
-    userId: 2,
-    orgId: 2,
-  },
+  connectedUser: null,
 })
 
 // MUTATIONS
@@ -33,9 +24,6 @@ export const mutations = {
     const index = state.users.findIndex((i) => i.id === id)
     state.users.splice(index, 1)
   },
-  // SET_IS_CONNECTED(state, res) {
-  //   state.isConnected = res
-  // },
   SET_CONNECTED_USER(state, res) {
     state.connectedUser = res
   },
@@ -53,36 +41,40 @@ export const actions = {
 
   async getUsers({ commit }) {
     const resultUsers = await axios.get('http://localhost:3001/users/')
-    // console.log('resultUsers:', resultUsers)
     commit('SET_USERS', resultUsers.data)
   },
 
   // CREATE USER
 
-  async createUser({ commit }, formData) {
+   async createUser({ commit }, formData) {
+    let role = 1
+    if (formData.role) {
+      role = formData.role
+    }
     const body = {
       firstName: formData.firstName,
       lastName: formData.lastName,
       email: formData.email,
       password: formData.password,
+      role,
     }
     const createUser = await axios.post('http://localhost:3001/users/', body)
     const createdUser = {
-      userId: createUser.data.data.id,
+      userId: createUser.data.newUser.userId,
       firstName: createUser.data.newUser.firstName,
       lastName: createUser.data.newUser.lastName,
       password: createUser.data.newUser.password,
       signUpDate: createUser.data.newUser.signUpDate,
+      email: createUser.data.newUser.email,
       role: createUser.data.newUser.role,
     }
     commit('CREATE_USER', createdUser)
-    return createUser
+    return createdUser
   },
 
   // LOGIN USER
 
   async loginUser({ commit }, loginConn) {
-    // console.log('loginConn:', loginConn)
     const loginAttempt = await axios.post(
       'http://localhost:3001/users/login',
       loginConn
@@ -134,23 +126,4 @@ export const actions = {
 
 // GETTERS
 
-export const getters = {
-  // getUsers: (state, getters, rootState, rootGetters) => {
-  //   // c'est l'ordre IMPERATIF des params
-  //   const gettersOrganisationById =
-  //     rootGetters['organisations/organisationKeyById']
-  //   const getUsers = []
-  //   for (const user of state.users) {
-  //     const stInfo = state.userTypes.find(
-  //       (st) => user.userTypeId.toString() === st.id.toString()
-  //     )
-  //     getUsers.push({
-  //       ...user,
-  //       brand: stInfo ? stInfo.brand : null,
-  //       model: stInfo ? stInfo.model : null,
-  //       organisation: gettersOrganisationById[user.organisationId],
-  //     })
-  //   }
-  //   return getUsers
-  // },
-}
+export const getters = {}

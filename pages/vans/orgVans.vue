@@ -1,5 +1,8 @@
 <template>
   <v-container>
+    <v-row class="d-flex justify-center">
+      <h1>Vos vans</h1>
+    </v-row>
     <v-row>
       <v-col v-for="van in getOrgVansWithPictures" :key="van.vanId" cols="12" md="6" sm="12">
         <v-card class="my-1">
@@ -13,7 +16,6 @@
             <v-rating :value="getReviewsAndStarsByVan.find(r => r.vanId === van.vanId).stars" color="info" dense half-increments readonly size="14"></v-rating>
             <v-col class="grey--text ms-4">
               {{ getReviewsAndStarsByVan.find(r => r.vanId === van.vanId).stars + ' (' +  getReviewsAndStarsByVan.find(r => r.vanId === van.vanId).reviewsNumber + ')' }}
-              <!-- 4.5 (413) -->
             </v-col>
           </v-row>
             
@@ -21,8 +23,7 @@
             {{ van.price }} € / jour • {{ van.capacity }} places
           </div>
           
-          <div>Small plates, salads & sandwiches - an intimate setting with 12 indoor seats plus patio seating.</div>
-          <!-- TODO: refaire les descriptions plus courtes ^^^^^^ -->
+          <div>{{ van.description }}</div>
           <v-row class="d-flex justify-space-between mt-4">
             <v-btn class="mx-2 my-2" color="info" @click="showUpdateDialog({ value: true, van: van })">Modifier ce van</v-btn>
             <v-btn class="mx-2 my-2" color="warning" @click="deleteConfirmation = true, aboutToBeDeletedVan = van">Retirer ce van</v-btn>
@@ -33,7 +34,7 @@
       <!-- DIALOGUE POUR UPDATE UN VAN -->
     </v-row>
     <v-dialog v-model="showUpdate" max-width="850px" content-class="custom-dialog">
-      <FormUpdateVan :van="vanInfos" @close="showUpdateDialog(false)" />
+      <FormUpdateVan :van="vanInfos" @close="showUpdateDialog({value: false, van: null})" />
     </v-dialog>
     <v-dialog v-model="deleteConfirmation" width="500" content-class="custom-dialog">
       <v-row no-gutters class="d-flex justify-center">
@@ -46,7 +47,6 @@
         </v-form>
       </v-row>
     </v-dialog>
-    <!-- <ErrorMessageHandling v-if="errorMessage" :error-message="errorMessage" /> -->
   </v-container>
 </template>
 <script>
@@ -59,42 +59,27 @@ export default {
   },
   data() {
     return {
-      headers: [
-        { text: 'van_id', value: 'van_id' },
-        { text: 'user_id', value: 'user_id' },
-        { text: 'Marque', value: 'model' },
-        { text: 'Capacity', value: 'capacity' },
-        { text: "description", value: 'description' },
-        { text: 'price', value: 'price' },
-      ],
-      showCard: false,
-      vanToShow: null,
-      errorMessage: null,
       showUpdate: false,
       vanInfos: {},
-      untouchedVan: null,
-      getOrgVansWithPictures: null,
       deleteConfirmation: false,
       aboutToBeDeletedVan: null,
     }
   },
   computed: {
-    ...mapState('vans', ['vans']),
     ...mapGetters('vans', ['getVansWithPictures']),
     ...mapGetters('bookings', ['getReviewsAndStarsByVan']),
-    ...mapState('orgs', ['orgs']),
     ...mapState('users', ['connectedUser']),
+    getOrgVansWithPictures() {
+      return this.getVansWithPictures.filter(v => v.orgId === this.connectedUser.orgId)
+    }
   },
-  watch: {
-  },
+  watch: {},
   created() {
     this.init()
   },
   methods: {
     ...mapActions('vans', ['updateVan', 'deleteVan']),
-
     init() {
-      this.getOrgVansWithPictures = this.getVansWithPictures.filter(v => v.orgId === this.connectedUser.orgId)
     },
     showUpdateDialog(data) {
       this.vanInfos = data.van
@@ -109,7 +94,7 @@ export default {
         await this.updateVan(this.vanInfos)
         this.showUpdate = false
       } catch (error) {
-        this.errorMessage = error
+      console.log('error:', error)
       }
     },
   },

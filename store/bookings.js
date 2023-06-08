@@ -16,6 +16,9 @@ export const mutations = {
   SET_BOOKING_REVIEWS(state, res) {
     state.bookingReviews = res
   },
+  CREATE_BOOKING_REVIEW(state, res) {
+    state.bookingReviews.push(res)
+  },
   CREATE_BOOKING(state, res) {
     state.bookings.push(res)
   },
@@ -46,7 +49,8 @@ export const actions = {
     const res = await axios.get('http://localhost:3001/bookings/reviews')
     commit('SET_BOOKING_REVIEWS', res.data)
   },
-  // CREATE VAN
+  
+  // CREATE 
 
   async createBooking({ commit }, bookingData) {
     let start = null
@@ -83,15 +87,12 @@ export const actions = {
   async createReview({ commit }, review) {
 
     const createReview = await axios.post(
-      'http://localhost:3001/bookings/reviews',
-      review
-      )
-      console.log('createReview:', createReview)
-    // commit('CREATE_REVIEW', createReview.data.data)
+      'http://localhost:3001/bookings/reviews',review)
+    commit('CREATE_REVIEW', createReview.data.data)
     return review
   },
 
-  // UPDATE VAN
+  // UPDATE
 
   async updateBooking({ commit }, { date, booking }) {
     let start = null
@@ -160,7 +161,7 @@ export const actions = {
       return updatedBooking.data.data
   },
 
-  // DELETE VAN
+  // DELETE
 
   async deleteBooking({ commit }, id) {
     await axios.delete(`http://localhost:3001/bookings/${id}`)
@@ -191,19 +192,3 @@ export const getters = {
     return reviewsByVan
   }
 }
-
-// getVansWithPictures: (state, getters, rootState, rootGetters) => {
-//   const getVansWithPic = []
-//   for (const van of state.vans) {
-//     const readablePic = []
-//     const vanPictures = state.vansPictures.filter((vp) => van.vanId === vp.vanId)
-//     for (const picture of vanPictures) {
-//       const uint8Array = new Uint8Array(picture.picture.data);
-//       const blob = new Blob([uint8Array], { type: 'image/jpeg' });
-//       const readableImage = URL.createObjectURL(blob);
-//       readablePic.push(readableImage)
-//     }
-//     getVansWithPic.push({...van, readablePictures : readablePic})
-//   }
-//   return getVansWithPic
-// }

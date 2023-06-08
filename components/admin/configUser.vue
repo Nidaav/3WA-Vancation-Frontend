@@ -32,16 +32,13 @@ export default {
     }
   },
   computed: {},
-  watch: {
-  },
+  watch: {},
   created() {
     this.init()
   },
   methods: {
     ...mapActions('users', ['deleteUser']),
-    init() {
-      console.log('user configUser:', this.user)
-    },
+    init() {},
     deleteItem() {
       this.deleteUser(this.user.userId)
       this.$emit('close')

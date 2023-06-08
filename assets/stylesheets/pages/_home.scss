@@ -4,7 +4,7 @@
   width: 100%;
   overflow-y: hidden;
   margin: 0 auto;
-  background-color: #80afe4c2;
+  background-color: #ad6720;
   /*
     HEADER 
   */
@@ -51,18 +51,18 @@
     }
     .btn-discover:hover {
       background-color: #120326;
-      border: 1px solid #4CAF50;
-      color: #4CAF50;
+      border: 1px solid info;
+      color: #26A69A;
       transition: 0.2s ease-in;
     }
 
     .your-van {
       background-color: #120326;
-      color: #4CAF50;
+      color: #26A69A;
     }
 
     .all-vans {
-      background-color: #4CAF50;
+      background-color: #26A69A;
       color: #120326;
       font-size: 1rem;
       font-weight: 600;
@@ -85,7 +85,7 @@
       align-items: center;
 
       .box-title p {
-        color: #373737;
+        color: #DED9C4;
         text-align: center;
         margin: 0;
         font-size: 1.2rem;
@@ -113,7 +113,7 @@
         text-align: center;
         height: 25px;
         width: 25px;
-        background: #4CAF50;
+        background: #26A69A;
         border-radius: 50%;
         position: absolute;
         top: 0;
@@ -159,7 +159,7 @@
       justify-content: space-between;
       align-items: center;
       .right-home-info {
-        color: #373737;
+        color: #DED9C4;
         padding: 2vh 2vw;
       }
       .left-home-info {

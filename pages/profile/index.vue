@@ -1,7 +1,6 @@
 <template>
 	<v-form v-model="valid">
-    <h2>Modifier mes informations :</h2>
-		<v-container class="d-flex">
+		<v-container no-gutters class="flex-column">
 			<v-row no-gutters>
 				<v-col cols="12">
 					<v-text-field v-model="formInfos.firstName" :rules="nameRules" label="Prénom" required></v-text-field>
@@ -13,16 +12,23 @@
 				<v-col cols="12">
 					<v-text-field v-model="formInfos.email" :rules="emailRules" label="E-mail" required></v-text-field>
 				</v-col>
-				<v-col cols="12" class="d-flex justify-center mt-4">
-					<v-btn :disabled="!valid || isLoading ||  isTheSame" color="info" class="mr-4" @click="register">
+
+				<v-col cols="12" class="d-flex justify-space-around mt-4">
+					<v-btn :disabled="!valid || isLoading || isTheSame" color="info" @click="register">
 						Modifier
 					</v-btn>
-
 					<v-btn color="warning" @click="reset">
 						Annuler
 					</v-btn>
-					<!-- <v-btn color="info" to="/login" class="ml-4">Se connecter</v-btn> -->
 				</v-col>
+
+				<v-col cols="12" class="d-flex justify-center mt-4">
+					<v-btn to='/login' @click="reset">
+						Retour
+					</v-btn>
+				</v-col>
+			</v-row>
+			<v-row cols="12">
 			</v-row>
 		</v-container>
 	</v-form>
@@ -45,35 +51,31 @@ export default {
 		passwordRules: [
 			v => !!v || 'Ce champ est requis',
 		],
-		errorMessage: null,
-    formInfos: null,
-    untouchedFormInfos: null,
+		formInfos: null,
+		untouchedFormInfos: null,
 	}),
-  computed: {
-    ...mapState('users', ['connectedUser']),
-    isTheSame() {
-      return JSON.stringify(this.untouchedFormInfos) === JSON.stringify(this.formInfos) 
-    }
-  },
-  created() {
-    this.init()
-  },
+	computed: {
+		...mapState('users', ['connectedUser']),
+		isTheSame() {
+			return JSON.stringify(this.untouchedFormInfos) === JSON.stringify(this.formInfos)
+		}
+	},
+	created() {
+		this.init()
+	},
 
 	methods: {
 		...mapActions('users', ['createUser', 'updateUser']),
-    init() {
-      this.formInfos = JSON.parse(JSON.stringify(this.connectedUser))
-      this.untouchedFormInfos = JSON.parse(JSON.stringify(this.formInfos))
-    },
+		init() {
+			this.formInfos = JSON.parse(JSON.stringify(this.connectedUser))
+			this.untouchedFormInfos = JSON.parse(JSON.stringify(this.formInfos))
+		},
 		async register() {
 			this.isLoading = true
-      console.log('this.formInfos:', this.formInfos)
 			try {
-				const registerInfos = await this.updateUser(this.formInfos)
-				console.log('registerInfos:', registerInfos)
-				// this.$router.push('/login');
+				await this.updateUser(this.formInfos)
 			} catch (error) {
-				this.errorMessage = error
+			console.log('error:', error)
 			}
 			this.isLoading = false
 		},

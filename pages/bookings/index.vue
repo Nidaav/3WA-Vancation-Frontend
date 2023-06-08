@@ -1,11 +1,11 @@
 <template>
   <v-container>
-    <v-row>
+    <v-row class="d-flex justify-center">
       <h1>Mes réservations</h1>
     </v-row>
     <v-row v-if="allBookings.length === 0">
-    <h2>Vous n'avez pas encore effectué de réservation</h2>
-    <v-btn to="/vans">Découvrez les vans disponibles</v-btn>
+      <h2>Vous n'avez pas encore effectué de réservation</h2>
+      <v-btn to="/vans">Découvrez les vans disponibles</v-btn>
     </v-row>
     <v-row v-if="allBookings.length > 0">
       <v-col v-for="(booking, index) in allBookings" :key="index" cols="12" md="6" sm="12">
@@ -19,21 +19,33 @@
             <div class="my-4 text-subtitle-1">
               {{ booking.priceTotal }} € • {{ booking.van.capacity }} places
             </div>
-            <v-row>
+            <v-row no-gutters>
               <v-col>
-                Du {{ format(new Date(booking.startDate), 'dd/MM/yyyy') }} au {{ format(new Date(booking.endDate),
-                  'dd/MM/yyyy') }}
+                Du {{ format(new Date(booking.startDate), 'dd/MM/yyyy') }}
+                au {{ format(new Date(booking.endDate),'dd/MM/yyyy') }}
               </v-col>
               <v-spacer></v-spacer>
-              <v-col v-if="booking.status === 'en attente' && new Date(booking.startDate).getTime() < new Date().getTime()"><h4> refusée </h4></v-col>
-              <v-col v-else><h4>{{ booking.status }}</h4></v-col>
+              <v-col
+                v-if="booking.status === 'en attente' && new Date(booking.startDate).getTime() < new Date().getTime()">
+                <h4> refusée </h4>
+              </v-col>
+              <v-col v-else>
+                <h4>{{ booking.status }}</h4>
+              </v-col>
+            </v-row>
+            <v-row v-if="booking.status === 'en attente' && new Date(booking.startDate).getTime() > new Date().getTime()">
+              <v-col class="d-flex justify-center">
+                <v-btn :to="'/vans/' + booking.van.vanId" cols="4" sm="12">Voir ce van</v-btn>
+              </v-col>
+              <v-col class="d-flex justify-space-between" cols="12">
+                <v-btn color="error" cols="4" sm="6" class="mr-2" @click="deleteConfirmation = true">Supprimer</v-btn>
+                <v-btn color="warning" cols="4" sm="6"
+                  @click="showBookingDialog({ value: true, booking })">Modifier</v-btn>
+              </v-col>
             </v-row>
             <v-row>
-              <v-col v-if="booking.status === 'en attente' && new Date(booking.startDate).getTime() > new Date().getTime()" class="d-flex justify-space-between">
-                <v-btn :to="'/vans/' + booking.van.vanId">Voir ce van</v-btn>
-                <v-btn color="warning" @click="showBookingDialog({ value: true, booking })">Modifier</v-btn>
-              </v-col>
-              <v-col v-if="booking.status === 'acceptée' && new Date(booking.endDate).getTime() < new Date().getTime()" class="d-flex justify-center">
+              <v-col v-if="booking.status === 'acceptée' && new Date(booking.endDate).getTime() < new Date().getTime()"
+                class="d-flex justify-center">
                 <v-btn color="info" @click="makeReview(booking)">Laisser un commentaire</v-btn>
               </v-col>
               <v-col v-if="new Date(booking.startDate).getTime() < new Date().getTime()" class="d-flex justify-center">
@@ -50,9 +62,9 @@
           <v-date-picker v-model="bookingInfos" color="info lighten-1" range></v-date-picker>
           <v-col class="d-flex justify-space-between">
             <v-btn
-              :disabled="bookingInfos && bookingInfos.length !== 2 || JSON.stringify(untouchedBooking) === JSON.stringify(bookingInfos)"
+              :disabled="bookingInfos && bookingInfos.length !== 2 || JSON.stringify(untouchedBooking) === JSON.stringify(bookingInfos) || new Date(bookingInfos[0]).getTime() < new Date().getTime() || new Date(bookingInfos[1]).getTime() < new Date().getTime()"
               color="info" class="mr-4" @click="updateBookingInfos(dialogBookingInfos)">Modifier</v-btn>
-            <v-btn color="warning" @click="deleteConfirmation = true">Annuler</v-btn>
+            <v-btn color="warning" @click="showBooking = false">Annuler</v-btn>
           </v-col>
         </v-form>
       </v-row>
@@ -71,7 +83,6 @@
     <v-dialog v-model="showReview" max-width="850px" content-class="custom-dialog">
       <FormReview :booking="bookingToReview" @close="showReview = false" />
     </v-dialog>
-    <!-- <ErrorMessageHandling v-if="errorMessage" :error-message="errorMessage" /> -->
   </v-container>
 </template>
 <script>
@@ -94,7 +105,6 @@ export default {
       ],
       showCard: false,
       allBookings: null,
-      errorMessage: null,
       bookingInfos: null,
       dialogBookingInfos: null,
       showBooking: false,
@@ -132,10 +142,10 @@ export default {
           booking.van = vanForTheBooking
         }
         const orderedBookings = allBookingsFromThisUser.sort((a, b) => {
-        const dateA = new Date(a.startDate).getTime()
-        const dateB = new Date(b.startDate).getTime()
-        return dateA - dateB
-      })
+          const dateA = new Date(a.startDate).getTime()
+          const dateB = new Date(b.startDate).getTime()
+          return dateA - dateB
+        })
         this.allBookings = orderedBookings
       },
       immediate: true,
@@ -165,7 +175,6 @@ export default {
       this.showBooking = value
       this.bookingInfos = [booking.startDate, booking.endDate]
       this.untouchedBooking = JSON.parse(JSON.stringify(this.bookingInfos))
-      console.log('this.bookingInfos:', this.bookingInfos)
       this.dialogBookingInfos = booking
     },
     async updateBookingInfos(dialogBookingInfos) {
@@ -173,7 +182,7 @@ export default {
         await this.updateBooking({ date: this.bookingInfos, booking: dialogBookingInfos })
         this.showBooking = false
       } catch (error) {
-        this.errorMessage = error
+      console.log('error:', error)
       }
     },
     async deleteBookingInfos(dialogBookingInfos) {
@@ -182,7 +191,7 @@ export default {
         this.deleteConfirmation = false
         this.showBooking = false
       } catch (error) {
-        this.errorMessage = error
+      console.log('error:', error)
       }
     },
     makeReview(booking) {

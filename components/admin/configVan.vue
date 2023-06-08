@@ -33,16 +33,13 @@ export default {
     }
   },
   computed: {},
-  watch: {
-  },
+  watch: {},
   created() {
     this.init()
   },
   methods: {
     ...mapActions('vans', ['deleteVan']),
-    init() {
-      console.log('van configVan:', this.van)
-    },
+    init() {},
     deleteItem() {
       this.deleteVan(this.van.vanId)
       this.$emit('close')

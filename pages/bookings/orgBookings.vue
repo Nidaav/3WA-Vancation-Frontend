@@ -15,23 +15,23 @@
             <div class="my-4 text-subtitle-1">
               {{ booking.priceTotal }} € • {{ booking.van.capacity }} places
             </div>
-            <v-row>
+            <v-row no-gutters>
               <v-col>
-                Du {{ format(new Date(booking.startDate), 'dd/MM/yyyy') }} au {{ format(new Date(booking.endDate),
-                  'dd/MM/yyyy') }}
+                Du {{ format(new Date(booking.startDate), 'dd/MM/yyyy') }}
+                au {{ format(new Date(booking.endDate),'dd/MM/yyyy') }}
               </v-col>
               <v-spacer></v-spacer>
               <v-col>{{ booking.status }}</v-col>
             </v-row>
             <v-row class="d-flex justify-space-between mt-2">
-              <v-btn class="mx-2 my-2" :disabled="booking.status === 'acceptée'" color="info" @click="acceptProcess(booking)">Accepter</v-btn>
-              <v-btn class="mx-2 my-2" :disabled="booking.status === 'refusée'" color="error" @click="refuseProcess(booking)">Refuser</v-btn>
+              <v-btn class="mx-2 my-2" :disabled="booking.status === 'acceptée' || new Date(booking.startDate).getTime() < new Date().getTime()" color="info" @click="acceptProcess(booking)">Accepter</v-btn>
+              <v-btn class="mx-2 my-2" :disabled="booking.status === 'refusée' || new Date(booking.startDate).getTime() < new Date().getTime()" color="error" @click="refuseProcess(booking)">Refuser</v-btn>
             </v-row>
           </v-card-text>
         </v-card>
       </v-col>
     </v-row>
-    <v-dialog v-model="acceptConfirmation" width="500">
+    <v-dialog v-model="acceptConfirmation" width="500" content-class="custom-dialog">
       <v-row no-gutters class="d-flex justify-center">
         <v-form>
           <h3>Voulez-vous accepter cette réservation ?</h3>
@@ -42,7 +42,7 @@
         </v-form>
       </v-row>
     </v-dialog>
-    <v-dialog v-model="deleteConfirmation" width="500">
+    <v-dialog v-model="deleteConfirmation" width="500" content-class="custom-dialog">
       <v-row no-gutters class="d-flex justify-center">
         <v-form>
           <h3>Voulez-vous refuser cette réservation ?</h3>
@@ -65,7 +65,6 @@ export default {
   data() {
     return {
       showCard: false,
-      allBookings: null,
       errorMessage: null,
       bookingInfos: null,
       dialogBookingInfos: null,
@@ -80,20 +79,21 @@ export default {
     ...mapGetters('vans', ['getVansWithPictures']),
     ...mapState('bookings', ['bookings', 'bookingReviews']),
     ...mapState('users', ['connectedUser']),
+    allBookings() {
+      const allBookingsFromThisUser = JSON.parse(JSON.stringify(this.bookings.filter(b => b.orgId === this.connectedUser.orgId)))
+      for (const booking of allBookingsFromThisUser) {
+        const vanForTheBooking = this.getVansWithPictures.find(v => v.vanId === booking.vanId)
+        booking.van = vanForTheBooking
+      }
+      const orderedBookings = allBookingsFromThisUser.sort((a, b) => {
+        const dateA = new Date(a.startDate).getTime()
+        const dateB = new Date(b.startDate).getTime()
+        return dateA - dateB
+      })
+      return orderedBookings
+    }
   },
-  watch: {
-    bookings: {
-      handler(newBookings) {
-        const allBookingsFromThisUser = JSON.parse(JSON.stringify(newBookings.filter(b => b.userId === this.connectedUser.userId)))
-        for (const booking of allBookingsFromThisUser) {
-          const vanForTheBooking = this.getVansWithPictures.find(v => v.vanId === booking.vanId)
-          booking.van = vanForTheBooking
-        }
-        this.allBookings = allBookingsFromThisUser
-      },
-      immediate: true,
-    },
-  },
+  watch: {},
   created() {
     this.init()
   },
@@ -102,12 +102,6 @@ export default {
     ...mapActions('bookings', ['acceptBookingStatus', 'refuseBookingStatus']),
     format,
     init() {
-      const allBookingsFromThisUser = JSON.parse(JSON.stringify(this.bookings.filter(b => b.orgId === this.connectedUser.orgId)))
-      for (const booking of allBookingsFromThisUser) {
-        const vanForTheBooking = this.getVansWithPictures.find(v => v.vanId === booking.vanId)
-        booking.van = vanForTheBooking
-      }
-      this.allBookings = allBookingsFromThisUser
     },
     acceptProcess(booking) {
       this.acceptConfirmation = true
@@ -130,4 +124,8 @@ export default {
   },
 }
 </script>
-<style></style>
+<style>
+.custom-dialog {
+  background-color: rgb(32, 31, 31);
+}
+</style>

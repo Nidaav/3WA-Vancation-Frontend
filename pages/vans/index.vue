@@ -1,46 +1,42 @@
 <template>
   <v-container class="container">
-    <v-row>
-      <!-- TODO: SEARCHBAR -->
+    <v-row class="d-flex justify-center mx-12">
+      <v-select v-model="location" :items="locations" label="Ville de départ" single-line
+        prepend-icon="mdi-map-marker"></v-select>
     </v-row>
-
     <v-row>
-      <v-col v-for="van in getVansWithPictures" :key="van.vanId" cols="12" md="6" sm="12">
+      <v-col v-for="van in vansToDisplay" :key="van.vanId" cols="12" md="6" sm="12">
         <v-card class="my-1">
           <v-card-title>{{ van.model }}</v-card-title>
-        <v-carousel>
-          <v-carousel-item v-for="(picture, i) in van.readablePictures" :key="i" :src="picture">
-          </v-carousel-item>
-        </v-carousel>
-        <!-- <v-col v-for="picture in van.readablePictures" :key="picture">
-          <h5>image : {{ picture }}</h5>
-          <img height="250" :src="picture" alt="Photo de van" />
-        </v-col> -->
-        <v-card-text>
-          <v-row align="center" class="mx-0">
-            <v-rating :value="getReviewsAndStarsByVan.find(r => r.vanId === van.vanId).stars" color="info" dense half-increments readonly size="14"></v-rating>
-            <v-col class="grey--text ms-4">
-              {{ getReviewsAndStarsByVan.find(r => r.vanId === van.vanId).stars + ' (' +  getReviewsAndStarsByVan.find(r => r.vanId === van.vanId).reviewsNumber + ')' }}
-              <!-- 4.5 (413) -->
+          <v-carousel>
+            <v-carousel-item v-for="(picture, i) in van.readablePictures" :key="i" :src="picture">
+            </v-carousel-item>
+          </v-carousel>
+          <v-card-text>
+            <v-row align="center" class="mx-0">
+              <v-rating :value="getReviewsAndStarsByVan.find(r => r.vanId === van.vanId).stars" color="info" dense
+                half-increments readonly size="14"></v-rating>
+              <v-col class="grey--text ms-4">
+                {{ getReviewsAndStarsByVan.find(r => r.vanId === van.vanId).stars + ' (' +
+                  getReviewsAndStarsByVan.find(r => r.vanId === van.vanId).reviewsNumber + ')' }}
+              </v-col>
+            </v-row>
+
+            <div class="my-4 text-subtitle-1">
+              {{ van.price }} € / jour • {{ van.capacity }} places
+            </div>
+
+            <div>{{ van.description }}</div>
+            <v-col class="d-flex justify-space-between">
+              <v-btn color="info" :to="'/vans/' + van.vanId">Voir ce van</v-btn>
+              <v-btn icon color="grey darken-3">
+                <v-icon>mdi-heart</v-icon>
+              </v-btn>
             </v-col>
-          </v-row>
-          
-          <div class="my-4 text-subtitle-1">
-            {{ van.price }} € / jour • {{ van.capacity }} places
-          </div>
-          
-          <div>Small plates, salads & sandwiches - an intimate setting with 12 indoor seats plus patio seating.</div>
-          <v-col class="d-flex justify-space-between">
-            <v-btn color="info" :to="'/vans/' + van.vanId">Voir ce van</v-btn>
-            <v-btn icon color="grey darken-3">
-              <v-icon>mdi-heart</v-icon>
-            </v-btn>
-          </v-col>
-        </v-card-text>
-      </v-card>
-    </v-col>
+          </v-card-text>
+        </v-card>
+      </v-col>
     </v-row>
-    <!-- <ErrorMessageHandling v-if="errorMessage" :error-message="errorMessage" /> -->
   </v-container>
 </template>
 <script>
@@ -50,41 +46,39 @@ export default {
   components: {},
   data() {
     return {
-      headers: [
-        { text: 'van_id', value: 'van_id' },
-        { text: 'user_id', value: 'user_id' },
-        { text: 'Marque', value: 'model' },
-        { text: 'Capacity', value: 'capacity' },
-        { text: "description", value: 'description' },
-        { text: 'price', value: 'price' },
-      ],
-      showCard: false,
-      vanToShow: null,
-      errorMessage: null,
       model: 0,
+      location: 'Rennes',
+      locations: ['Rennes', 'Saint Malo', 'Saint Brieuc', 'Vannes', 'Lorient', 'Brest'],
     }
   },
   computed: {
-    ...mapState('vans', ['vans', 'vansPictures']),
+    ...mapState('vans', ['vans']),
     ...mapGetters('vans', ['getVansWithPictures']),
     ...mapGetters('bookings', ['getReviewsAndStarsByVan']),
-    ...mapState('bookings', ['bookingReviews']),
-    ...mapState('users', ['connectedUser']),
   },
   watch: {
+    location() {
+      setTimeout(this.init(), 500)
+    }
   },
   created() {
-    this.init(
-    )
+    this.init()
   },
-
   methods: {
     init() {
-      this.vansToDisplay = this.vans
-      for (const van of this.vansToDisplay) {
-        van.favBoolean = false
-      }
+      this.vansToDisplay = this.shuffleArray(JSON.parse(JSON.stringify(this.getVansWithPictures)))
     },
+    shuffleArray(array) {
+      const shuffledArray = [...array];
+      for (let i = shuffledArray.length - 1; i > 0; i--) {
+        const randomIndex = Math.floor(Math.random() * (i + 1));
+        [shuffledArray[i], shuffledArray[randomIndex]] = [
+          shuffledArray[randomIndex],
+          shuffledArray[i],
+        ];
+      }
+      return shuffledArray;
+    }
   },
 }
 </script>
