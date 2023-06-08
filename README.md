@@ -9,19 +9,12 @@ $ npm install
 # serve with hot reload at localhost:3000
 $ npm run dev
 
-# build for production and launch server
-$ npm run build
-$ npm run start
-
-# generate static project
-$ npm run generate
 ```
 
-Pour vous connecter, 3 types d'utilisateurs : 
+Pour vous connecter sur l'application, on a le choix entre 3 types d'utilisateurs qui ont tous accès à des fonctionnalités différentes: 
  - Le visiteur classique email : c@c , mdp: c ;
  - L'organisation loueuse de vans : email : b@b , mdp: b ;
  - L'administrateur email : a@a , mdp: a ; 
-
 
 
 
