@@ -21,7 +21,7 @@ export const mutations = {
     state.users.splice(index, 1, res)
   },
   DELETE_USER(state, id) {
-    const index = state.users.findIndex((i) => i.id === id)
+    const index = state.users.findIndex((i) => i.userId === id)
     state.users.splice(index, 1)
   },
   SET_CONNECTED_USER(state, res) {
