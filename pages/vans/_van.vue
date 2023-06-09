@@ -36,7 +36,7 @@
     <v-dialog v-model="showBooking" content-class="custom-dialog" width="290">
       <v-row no-gutters class="flex-column">
         <v-col>
-          <v-date-picker v-model="bookingInfos" color="info" range></v-date-picker>
+          <v-date-picker v-model="bookingInfos" color="info" range locale="fr"></v-date-picker>
         </v-col>
         <v-col class="d-flex justify-space-between">
           <v-btn :disabled="new Date(bookingInfos[0]).getTime() < new Date().getTime() || new Date(bookingInfos[1]).getTime() < new Date().getTime()" class="mx-2 my-2" color="info" @click="addBooking">Réserver</v-btn>

@@ -88,7 +88,7 @@ export const actions = {
 
     const createReview = await axios.post(
       'http://localhost:3001/bookings/reviews',review)
-    commit('CREATE_REVIEW', createReview.data.data)
+    commit('CREATE_BOOKING_REVIEW', createReview.data.data)
     return review
   },
 

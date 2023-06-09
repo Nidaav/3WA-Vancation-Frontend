@@ -59,7 +59,7 @@
     <v-dialog v-model="showBooking" content-class="custom-dialog" width="290">
       <v-row no-gutters class="d-flex justify-center">
         <v-form>
-          <v-date-picker v-model="bookingInfos" color="info lighten-1" range></v-date-picker>
+          <v-date-picker v-model="bookingInfos" color="info lighten-1" range locale="fr"></v-date-picker>
           <v-col class="d-flex justify-space-between">
             <v-btn
               :disabled="bookingInfos && bookingInfos.length !== 2 || JSON.stringify(untouchedBooking) === JSON.stringify(bookingInfos) || new Date(bookingInfos[0]).getTime() < new Date().getTime() || new Date(bookingInfos[1]).getTime() < new Date().getTime()"
